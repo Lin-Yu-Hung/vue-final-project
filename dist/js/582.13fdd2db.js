@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkfinal_project"]=self["webpackChunkfinal_project"]||[]).push([[582],{7582:function(n,r,e){e.r(r),e.d(r,{default:function(){return i}});var t=e(3396);function u(n,r){return(0,t.wg)(),(0,t.iD)("div",null,"products")}var c=e(89);const a={},f=(0,c.Z)(a,[["render",u]]);var i=f}}]);
+//# sourceMappingURL=582.13fdd2db.js.map
