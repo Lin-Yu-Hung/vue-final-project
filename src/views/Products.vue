@@ -1,9 +1,10 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
+  <Loading :active="isLoading"></Loading>
   <div class="container-fluid">
     <div class="text-end">
       <br />
-      <button type="button" class="btn btn-primary" @click="openModal">
+      <button type="button" class="btn btn-primary" @click="openModal(true)">
         新增商品
       </button>
     </div>
@@ -29,18 +30,25 @@
           <td class="text-right">{{ item.origin_price }}</td>
           <td class="text-right">{{ item.price }}</td>
           <td>
-            <span
-              :class="{
-                'text-success': item.is_enabled == true,
-                'text-danger': item.is_enabled == false
-              }"
-              >{{ item.is_enabled ? '啟用' : '未啟用' }}
+            <span v-if="item.is_enabled == true" class="text-success"
+              >啟用
             </span>
+            <span v-else class="text-danger">未啟用 </span>
           </td>
           <td>
             <div class="btn-group">
-              <button class="btn btn-outline-primary btn-sm">編輯</button>
-              <button class="btn btn-outline-danger btn-sm">刪除</button>
+              <button
+                class="btn btn-outline-primary btn-sm"
+                @click="openModal(false, item)"
+              >
+                編輯
+              </button>
+              <button
+                class="btn btn-outline-danger btn-sm"
+                @click="openDelProduct(item)"
+              >
+                刪除
+              </button>
             </div>
           </td>
         </tr>
@@ -49,47 +57,115 @@
     <ProductModal
       ref="ProductModal"
       @update-product="updateProduct"
+      :product="tempProduct"
+      :title="modalTitle"
     ></ProductModal>
+    <DelProductModal
+      ref="DelProductModal"
+      :product="tempProduct"
+      @delproduct="DelProduct"
+    ></DelProductModal>
+    <Success ref="Success"></Success>
+
+    <!-- 上方程式碼的用意為如果需要修改產品就會透過props的方式將資料傳給modal將資料直接帶入表單中 -->
   </div>
 </template>
 <script>
 import ProductModal from '../components/ProductModal.vue'
+import DelProductModal from '../components/DelModal.vue'
+import Success from '../components/Success.vue'
 export default {
   data() {
     return {
       products: [],
       pagination: {},
-      tempProduct: {}
+      tempProduct: {},
+      isNew: false, // 用於判斷目前點擊的按鈕是不是新增按鈕
+      modalTitle: '',
+      isLoading: false
     }
   },
   components: {
-    ProductModal
+    ProductModal,
+    DelProductModal,
+    Success
   },
   methods: {
     getProducts() {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products`
+      this.isLoading = true
       this.$http.get(api).then((res) => {
-        console.log(res)
-        this.products = res.data.products
-        this.pagination = res.data.pagination
+        if (res.data.success) {
+          this.isLoading = false
+          console.log(res)
+          this.products = res.data.products
+          this.pagination = res.data.pagination
+        } else {
+          this.isLoading = false
+        }
       })
     },
-    openModal() {
+    openModal(isNew, item) {
+      this.isNew = isNew
+      if (isNew) {
+        this.modalTitle = '新增資料'
+        this.tempProduct = {}
+      } else {
+        this.modalTitle = '編輯資料'
+        this.tempProduct = { ...item }
+      }
       this.$refs.ProductModal.showModal()
     },
     updateProduct(item) {
       // this.tempProduct = item
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`
-      this.$http.post(api, { data: item }).then((res) => {
+      this.isLoading = true
+      let api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`
+      let httpMethod = 'post'
+
+      // 如果現在是編輯狀態的話
+      if (!this.isNew) {
+        api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`
+        httpMethod = 'put'
+      }
+
+      this.$http[httpMethod](api, { data: item }).then((res) => {
+        console.log(res)
         console.log(res.data.success)
         if (res.data.success) {
-          console.log('資料新增成功！')
           this.$refs.ProductModal.hideModal()
           this.getProducts()
+          // this.$refs.Success.showModal()
+          this.emitter.emit('push-message', {
+            style: 'success',
+            title: '操作成功！'
+          })
+        } else {
+          this.emitter.emit('push-message', {
+            style: 'danger',
+            title: '操作失敗！',
+            content: res.data.message.join(' ')
+          })
+        }
+      })
+    },
+    openDelProduct(item) {
+      this.tempProduct = {}
+      this.tempProduct = item
+      this.$refs.DelProductModal.showDelModal()
+    },
+    DelProduct(item) {
+      this.isLoading = true
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`
+      this.$http.delete(api).then((res) => {
+        if (res.data.success) {
+          this.$refs.DelProductModal.hideDelModal()
+          this.getProducts()
+          this.$refs.Success.showModal()
         }
       })
     }
   },
+  inject: ['emitter'],
   created() {
     this.getProducts()
   }

@@ -11,6 +11,8 @@ import { required, email, min } from '@vee-validate/rules'
 import { localize, setLocale } from '@vee-validate/i18n'
 // 匯入繁體中文語系檔案
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json'
+import Loading from 'vue3-loading-overlay'
+import 'vue3-loading-overlay/dist/vue3-loading-overlay.css'
 
 // 設定 vee-validate 全域規則
 defineRule('required', required)
@@ -27,6 +29,7 @@ setLocale('zh_TW')
 const app = createApp(App)
 app.use(VueAxios, axios)
 app.use(router)
+app.component('Loading', Loading)
 
 // 註冊 vee-validate 三個全域元件
 app.component('Form', Form)

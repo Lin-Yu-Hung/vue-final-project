@@ -1,13 +1,22 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <Navbar></Navbar>
+  <ToastMessage></ToastMessage>
   <router-view />
 </template>
 <script>
 import Navbar from '../components/Navbar.vue'
+import emitter from '@/methods/emitter'
+import ToastMessage from '@/components/ToastMessage.vue'
 export default {
   components: {
-    Navbar
+    Navbar,
+    ToastMessage
+  },
+  provide() {
+    return {
+      emitter
+    }
   },
   created() {
     const token = document.cookie.replace(

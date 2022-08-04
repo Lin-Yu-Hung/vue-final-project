@@ -11,7 +11,7 @@
       <div class="modal-content border-0">
         <div class="modal-header bg-dark text-white">
           <h5 class="modal-title" id="exampleModalLabel">
-            <span>新增產品</span>
+            <span ref="modalTitle">{{ title }}</span>
           </h5>
           <button
             type="button"
@@ -38,7 +38,13 @@
                   >或 上傳圖片
                   <i class="fas fa-spinner fa-spin"></i>
                 </label>
-                <input type="file" id="customFile" class="form-control" />
+                <input
+                  type="file"
+                  id="customFile"
+                  class="form-control"
+                  ref="fileInput"
+                  @change="uploadFile"
+                />
               </div>
               <img class="img-fluid" alt="" />
               <!-- 延伸技巧，多圖 -->
@@ -87,23 +93,43 @@
                 <div class="row gx-2">
                   <div class="mb-3 col-md-6">
                     <label for="category" class="form-label">分類</label>
-                    <input
+                    <Field
                       type="text"
                       class="form-control"
                       id="category"
                       placeholder="請輸入分類"
                       v-model="tempProduct.category"
-                    />
+                      rules="required"
+                      name="分類"
+                      :class="{
+                        'is-invalid': errors['分類'],
+                        'is-valid': !errors['分類'] && values['分類']
+                      }"
+                    ></Field>
+                    <error-message
+                      name="分類"
+                      class="invalid-feedback"
+                    ></error-message>
                   </div>
                   <div class="mb-3 col-md-6">
                     <label for="price" class="form-label">單位</label>
-                    <input
+                    <Field
                       type="text"
                       class="form-control"
                       id="unit"
                       placeholder="請輸入單位"
                       v-model="tempProduct.unit"
-                    />
+                      rules="required"
+                      name="單位"
+                      :class="{
+                        'is-invalid': errors['單位'],
+                        'is-valid': !errors['單位'] && values['單位']
+                      }"
+                    ></Field>
+                    <error-message
+                      name="單位"
+                      class="invalid-feedback"
+                    ></error-message>
                   </div>
                 </div>
 
@@ -191,21 +217,24 @@
   </div>
 </template>
 <script>
-import Modal from 'bootstrap/js/dist/modal'
+import mixinsModal from '@/mixins/modalMixins'
 export default {
-  //   props: {
-  //     product: {
-  //       type: Object,
-  //       default() {
-  //         return {}
-  //       }
-  //     }
-  //   },
-  //   watch: {
-  //     product() {
-  //       this.tempProduct = this.product
-  //     }
-  //   },
+  mixins: [mixinsModal],
+  props: {
+    product: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    // eslint-disable-next-line vue/require-prop-type-constructor
+    title: ''
+  },
+  watch: {
+    product() {
+      this.tempProduct = this.product
+    }
+  },
   data() {
     return {
       modal: {},
@@ -213,17 +242,22 @@ export default {
     }
   },
   methods: {
-    showModal() {
-      this.tempProduct = {}
-      this.modal.show()
+    onSubmit(value, { resetForm }) {
+      console.log(value)
     },
-    hideModal() {
-      this.modal.hide()
-    },
-    onSubmit(value, { resetForm }) {}
-  },
-  mounted() {
-    this.modal = new Modal(this.$refs.modal)
+    uploadFile() {
+      const uploadedFile = this.$refs.fileInput.files[0]
+      console.dir(uploadedFile) // console.dir()可以顯示一個對象所有的屬性和方法。
+      const formData = new FormData()
+      formData.append('file-to-upload', uploadedFile)
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
+      this.$http.post(api, formData).then((res) => {
+        console.log(res.data)
+        if (res.data.success) {
+          this.tempProduct.imageUrl = res.data.imageUrl
+        }
+      })
+    }
   }
 }
 </script>
