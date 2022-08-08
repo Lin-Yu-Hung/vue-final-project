@@ -13,6 +13,7 @@ import { localize, setLocale } from '@vee-validate/i18n'
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json'
 import Loading from 'vue3-loading-overlay'
 import 'vue3-loading-overlay/dist/vue3-loading-overlay.css'
+import { currency } from './methods/filter'
 
 // 設定 vee-validate 全域規則
 defineRule('required', required)
@@ -27,6 +28,9 @@ configure({
 // 設定預設語系
 setLocale('zh_TW')
 const app = createApp(App)
+app.config.globalProperties.$filters = {
+  currency
+}
 app.use(VueAxios, axios)
 app.use(router)
 app.component('Loading', Loading)

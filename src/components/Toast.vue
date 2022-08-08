@@ -26,9 +26,7 @@
 </template>
 <script>
 import Toast from 'bootstrap/js/dist/toast'
-
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Toast',
   props: ['msg'],
   mounted() {

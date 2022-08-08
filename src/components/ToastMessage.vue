@@ -17,8 +17,10 @@ export default {
   inject: ['emitter'],
   mounted() {
     this.emitter.on('push-message', (message) => {
+      // console.log('這是傳來的', message)
+      // console.log('顯示資料', this.messages)
       const { style = 'success', title, content } = message
-      this.messages.push(style, title, content)
+      this.messages.push({ style, title, content })
     })
   }
 }

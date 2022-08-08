@@ -1,5 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
-
 <template>
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
@@ -29,8 +27,30 @@
           ></button>
         </div>
         <div class="offcanvas-body navbar-dark bg-dark">
-          <ul class="navbar-nav justify-content-end flex-grow-1">
+          <ul class="navbar-nav flex-grow-1">
             <li class="nav-item">
+              <router-link class="nav-link" to="/">首頁</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/login">登入</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/dashboard/products"
+                >控制台</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/dashboard/order"
+                >訂單</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/dashboard/coupon"
+                >優惠券</router-link
+              >
+            </li>
+
+            <!-- <li class="nav-item">
               <button type="button" class="btn btn-success me-3">
                 <a
                   class="nav-link"
@@ -45,7 +65,7 @@
               <button type="button" class="btn btn-danger">
                 <a class="nav-link" href="#" @click.prevent="logout">登出</a>
               </button>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>
