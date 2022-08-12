@@ -21,6 +21,20 @@ const routes = [
     component: () => import('@/views/Login.vue')
   },
   {
+    path: '/user',
+    component: () => import('../views/User.vue'),
+    children: [
+      {
+        path: 'cart',
+        component: () => import('../views/UserCart.vue')
+      },
+      {
+        path: 'product/:productId',
+        component: () => import('../views/UserProduct.vue')
+      }
+    ]
+  },
+  {
     path: '/dashboard',
     component: () => import('@/views/Dashboard.vue'),
     children: [
@@ -37,6 +51,11 @@ const routes = [
         component: () => import('@/views/Coupon.vue')
       }
     ]
+  },
+  // 404
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/NotFound.vue')
   }
 ]
 
