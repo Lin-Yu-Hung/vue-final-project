@@ -17,17 +17,27 @@
         id="offcanvasNavbar"
         aria-labelledby="offcanvasNavbarLabel"
       >
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
-          <button
-            type="button"
-            class="btn-close text-reset"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-          ></button>
+        <div class="offcanvas-header navbar-dark bg-dark">
+          <div class="container">
+            <div class="row">
+              <div class="col-11">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+                  Offcanvas
+                </h5>
+              </div>
+              <div class="col-1">
+                <button
+                  type="button"
+                  class="btn-close text-reset"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="offcanvas-body navbar-dark bg-dark">
-          <ul class="navbar-nav flex-grow-1">
+          <ul class="navbar-nav flex-grow-1 justify-content-end">
             <li class="nav-item">
               <router-link class="nav-link" to="/">首頁</router-link>
             </li>
@@ -49,24 +59,19 @@
                 >優惠券</router-link
               >
             </li>
-
-            <!-- <li class="nav-item">
-              <button type="button" class="btn btn-success me-3">
-                <a
-                  class="nav-link"
-                  aria-current="page"
-                  href="#"
-                  @click.prevent=""
-                  >Home</a
-                >
-              </button>
-            </li>
-            <li class="nav-item">
-              <button type="button" class="btn btn-danger">
-                <a class="nav-link" href="#" @click.prevent="logout">登出</a>
-              </button>
-            </li> -->
           </ul>
+          <!-- <a href="./cart_login.html"
+            ><button
+              style="margin-right: 1rem"
+              type="button"
+              class="btn btn-success btn-mr"
+            >
+              登入
+            </button></a
+          >
+          <a href="./cart_reg.html"
+            ><button type="button" class="btn btn-info btn-mr">註冊</button></a
+          > -->
         </div>
       </div>
     </div>
@@ -74,6 +79,13 @@
 </template>
 <style lang="scss">
 nav {
+  // box-shadow: 0 8px 6px -6px rgb(42, 41, 41);
+  z-index: 10;
+  ul {
+    li {
+      font-size: 1.25rem;
+    }
+  }
   div.container-fluid {
     button {
       padding: 0.3rem 1rem;
@@ -90,6 +102,25 @@ nav {
     div.container-fluid {
       button.btn {
         margin-top: 0.5rem;
+      }
+      .offcanvas-header {
+        color: white;
+        justify-content: center;
+        border-bottom: 3px solid white;
+        .col-1 {
+          padding: 0;
+
+          display: flex;
+          align-items: center;
+        }
+        .col-11 {
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          h5 {
+            font-size: 1.75rem;
+          }
+        }
       }
     }
   }

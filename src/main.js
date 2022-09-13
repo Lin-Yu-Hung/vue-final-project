@@ -15,6 +15,19 @@ import Loading from 'vue3-loading-overlay'
 import 'vue3-loading-overlay/dist/vue3-loading-overlay.css'
 import { currency } from './methods/filter'
 import VueCarousel from 'vue-carousel'
+import 'animate.css'
+// 輪播套件
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from 'swiper/vue'
+// 吐司套件
+import Toast from 'vue-toastification'
+// Import the CSS or use your own!
+import 'vue-toastification/dist/index.css'
+
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import 'swiper/css/effect-coverflow'
 
 // 設定 vee-validate 全域規則
 defineRule('required', required)
@@ -25,11 +38,13 @@ configure({
   generateMessage: localize({ zh_TW: zhTW }), // 載入繁體中文語系
   validateOnInput: true // 當輸入任何內容直接進行驗證
 })
+const options = {}
 
 // 設定預設語系
 setLocale('zh_TW')
 const app = createApp(App)
 app.use(VueCarousel)
+app.use(Toast, options)
 
 app.config.globalProperties.$filters = {
   // 將千分位程式加入至全域變數裡
@@ -43,5 +58,8 @@ app.component('Loading', Loading)
 app.component('Form', Form)
 app.component('Field', Field)
 app.component('ErrorMessage', ErrorMessage)
+
+app.component('Swiper', Swiper)
+app.component('SwiperSlide', SwiperSlide)
 
 app.mount('#app')
