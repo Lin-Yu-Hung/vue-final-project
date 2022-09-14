@@ -3,6 +3,7 @@ section.header {
     justify-content: center;
 
     width: 100%;
+
     .header {
         height: 30vw;
         width: 100%;
@@ -61,72 +62,97 @@ section.product {
         }
     }
 
-    .productList {
+    .products {
         flex: 6 1 300px;
         display: flex;
-        flex-wrap: wrap;
-
-        .card {
-            flex: 1 1 300px;
-            max-width: 270px;
-            margin: 0.5rem;
-
-            &:hover {
-                box-shadow: 8px 8px 6px -4px rgb(42, 41, 41);
-            }
-
-            img {
-                height: 15vw;
-                object-fit: cover;
-            }
-
-            .card-body {
-                .card-title {
-                    min-height: 50px
+        flex-direction: column;
+        .productList {
+            display: flex;
+            flex-wrap: wrap;
+            .card {
+                flex: 1 1 300px;
+                max-width: 300px;
+                margin: 0.5rem;
+                max-height: 560px;
+                &:hover {
+                    box-shadow: 8px 8px 6px -4px rgb(42, 41, 41);
                 }
 
-                .card-text {
-
-
-                    small {
-                        font-size: 1rem;
-                    }
-
-                    p {
-                        margin-bottom: 0;
-                    }
-
-                    .origin-price {
-                        text-decoration: line-through;
-                        color: gray;
-                    }
-
-                    .price {
-                        text-align: end;
-                        color: red;
-                        font-weight: bolder;
-                        font-size: 1.5rem;
-                        margin-bottom: 0.5rem;
-                    }
+                img {
+                    height: 15vw;
+                    object-fit: cover;
                 }
 
-                .footer-button {
-                    display: flex;
-
-                    button {
-                        width: 100%;
+                .card-body {
+                    .card-title {
+                        min-height: 80px
                     }
 
-                    .detail {
-                        flex: 1 1 120px;
-                        padding-right: 0.5rem;
+                    .card-text {
+
+
+                        small {
+                            font-size: 1rem;
+                        }
+
+                        p {
+                            margin-bottom: 0;
+                        }
+
+                        .origin-price {
+                            text-decoration: line-through;
+                            color: gray;
+                        }
+
+                        .price {
+                            text-align: end;
+                            color: red;
+                            font-weight: bolder;
+                            font-size: 1.5rem;
+                            margin-bottom: 0.5rem;
+                        }
                     }
 
-                    .add-cart {
-                        flex: 1 1 120px;
+                    .footer-button {
+                        display: flex;
+
+                        button {
+                            width: 100%;
+                        }
+
+                        .detail {
+                            flex: 1 1 120px;
+                            padding-right: 0.5rem;
+                        }
+
+                        .add-cart {
+                            flex: 1 1 120px;
+                        }
                     }
                 }
             }
         }
+        .pagination{
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+}
+.toTop{
+    cursor: pointer;
+    border-radius: 50%;
+    width: 6vw;
+    height: 6vw;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 1rem;
+    opacity: 0.5;
+    transition: all 0.25s ease;
+    display: none;
+    &:hover{
+        opacity: 1;
     }
 }

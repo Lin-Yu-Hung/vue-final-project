@@ -76,7 +76,7 @@ nav {
     }
   }
   div.container-fluid {
-    padding: 0rem 7.5rem;
+    padding: 0rem 9rem;
     button {
       padding: 0.3rem 1rem;
       &:hover {

@@ -17,7 +17,7 @@
         v-for="item in pages"
         :key="item"
         @click.prevent="updatePage(item)"
-        :class="{ 'active': item == nowpage }"
+        :class="{ active: item == nowpage }"
       >
         <a class="page-link" href="#">{{ item }}</a>
       </li>
