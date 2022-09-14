@@ -1,9 +1,9 @@
 <template>
-  <Navbar></Navbar>
+  <UserNavbar></UserNavbar>
   <div class="background">
     <div class="context animate__animated animate__fadeInUp">
       <h1>釋放你的電競魂!!</h1>
-      <button type="button" class="btn btn-success">
+      <button type="button" class="btn btn-primary">
         <a href="">開始選購</a>
       </button>
     </div>
@@ -97,13 +97,12 @@
 import { Autoplay, Pagination, Navigation, EffectCoverflow } from 'swiper'
 import { useToast } from 'vue-toastification'
 import toast from '../mixins/ToastMessage'
-
-import Navbar from '../components/Navbar.vue'
+import UserNavbar from '@/components/UserNavbar.vue'
 
 export default {
   mixins: [toast],
   components: {
-    Navbar
+    UserNavbar
   },
   setup() {
     // Get toast interface
