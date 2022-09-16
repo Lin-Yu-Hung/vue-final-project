@@ -1,7 +1,3 @@
-.test {
-    height: 400vh;
-}
-
 .background {
     box-shadow: 0 8px 6px -6px rgb(42, 41, 41);
     position: relative;
@@ -42,13 +38,15 @@ section.text {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     h1 {
         text-align: center;
         padding: 0rem 2rem;
         padding-top: 4rem;
         font-weight: bolder;
     }
-    hr{
+
+    hr {
         width: 50%;
         background-color: black;
         height: 3px;
@@ -61,12 +59,119 @@ section.first {
 
     .swiper {
         width: 80%;
-        height: 35vw;
-        padding-top: 50px;
-        padding-bottom: 50px;
+        height: min-content;
+        padding-top: 30px;
+        padding-bottom: 30px;
     }
-    .swiper-slide img {
-        display: block;
+
+    .swiper-slide {
         width: 100%;
+
+        .card {
+            .card-body {
+                img {
+                    object-fit: cover;
+                }
+
+                .card-title {
+                    min-height: 50px;
+                }
+
+                .card-text {
+                    small {
+                        font-size: 1rem;
+                    }
+
+                    p {
+                        margin-bottom: 0;
+                    }
+
+                    .origin-price {
+                        text-decoration: line-through;
+                        color: gray;
+                    }
+
+                    .price {
+                        text-align: end;
+                        color: red;
+                        font-weight: bolder;
+                        font-size: 1.5rem;
+                        margin-bottom: 0.5rem;
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+section.second {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    .text {
+        margin: 0.5rem;
+        h1 {
+            font-weight: bolder;
+            text-align: center;
+            margin-bottom: 0;
+
+        }
+
+    }
+
+    hr {
+        background-color: black;
+        height: 3px;
+        width: 50%;
+    }
+
+    .content {
+        width: 80%;
+        height: 50vh;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0rem 5rem;
+
+        .image {
+            flex: 1 1 520px;
+            background-image: url('@/assets/handiwork.jpg');
+            background-position: center;
+            object-fit: cover;
+            background-size: cover;
+        }
+        .image2 {
+            flex: 1 1 520px;
+            background-image: url('@/assets/repair.jpg');
+            background-position: center;
+            object-fit: cover;
+            background-size: cover;
+        }
+        .image3 {
+            flex: 1 1 520px;
+            background-image: url('@/assets/service.jpg');
+            background-position: center;
+            object-fit: cover;
+            background-size: cover;
+        }
+
+        .illustrate {
+            h2{
+                margin-bottom: 0;
+                font-weight: bolder;
+            }
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1 1 520px;
+            padding: 2rem;
+            font-size: 1.5rem;
+            p{
+                text-align: center;
+            }
+        }
     }
 }

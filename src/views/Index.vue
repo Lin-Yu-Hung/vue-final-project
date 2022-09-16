@@ -1,5 +1,5 @@
 <template>
-  <UserNavbar></UserNavbar>
+  <Loading :active="isLoading"></Loading>
   <div class="background">
     <div class="context animate__animated animate__fadeInUp">
       <h1>釋放你的電競魂!!</h1>
@@ -8,8 +8,9 @@
       </button>
     </div>
   </div>
+
   <section class="text" ref="sectionText">
-    <h1>全台最多品項任你挑選</h1>
+    <h1>熱門商品</h1>
     <hr />
   </section>
 
@@ -17,75 +18,99 @@
     <swiper
       :slidesPerView="1"
       :spaceBetween="10"
-      :pagination="{ clickable: true }"
       :breakpoints="{
-        '640': { slidesPerView: 2, spaceBetween: 20 },
+        '640': { slidesPerView: 3, spaceBetween: 20 },
         '768': {
           slidesPerView: 4,
           spaceBetween: 20
         },
-        '2024': { slidesPerView: 5, spaceBetween: 50 }
+        '1900': { slidesPerView: 5, spaceBetween: 20 },
+        '2024': { slidesPerView: 6, spaceBetween: 50 }
       }"
       :modules="modules"
       :autoplay="{ delay: 2500, disableOnInteraction: false }"
       :loop="true"
       class="mySwiper"
     >
-      <swiper-slide>
+      <swiper-slide v-for="item in showProducts" :key="item.id">
         <div class="card">
           <img
-            src="https://swiperjs.com/demos/images/nature-1.jpg"
+            :src="item.imageUrl"
             class="card-img-top"
-            alt="..."
+            :alt="item.title"
+            :title="item.title"
           />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </swiper-slide>
-      <swiper-slide>
-        <div class="card">
-          <img
-            src="https://swiperjs.com/demos/images/nature-1.jpg"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </swiper-slide>
-      <swiper-slide>
-        <div class="card">
-          <img
-            src="https://swiperjs.com/demos/images/nature-1.jpg"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+          <div class="card-body d-grid gap-2">
+            <h5
+              class="card-title"
+              :class="{
+                'fs-6': item.title.length >= 40,
+                'fs-5': item.title.length >= 35,
+                'fs-4': item.title.length < 15
+              }"
+            >
+              {{ item.title }}
+            </h5>
+            <div class="card-text">
+              <small class="origin-price">原價{{ item.origin_price }}</small>
+              <p class="price">優惠價${{ item.price }}</p>
+            </div>
+            <button
+              class="btn btn-primary"
+              @click.prevent="ProductDetail(item.id)"
+            >
+              前往選購
+            </button>
           </div>
         </div>
       </swiper-slide>
     </swiper>
   </section>
 
-  <button @click="test()">test</button>
+  <!-- <button @click="test()">test</button> -->
+  <section class="second">
+    <div class="text">
+      <h1>提供服務</h1>
+    </div>
+    <hr />
+    <br />
+    <div class="content">
+      <div class="image3"></div>
+      <div class="illustrate">
+        <h2>客製化組裝服務</h2>
+        <hr />
+        <p>
+          根據您的需求為您規劃最適合您的電腦<br />
+          讓您不用再為了組裝而煩惱!
+        </p>
+      </div>
+    </div>
+    <div class="content flex-row-reverse">
+      <div class="image2"></div>
+      <div class="illustrate">
+        <h2>專業維修服務</h2>
+        <hr />
+        <p>
+          我們重視每一位顧客的售後服務<br />
+          凡是於本店購買的商品我們都將提供專業的維修服務。
+        </p>
+      </div>
+    </div>
+    <div class="content">
+      <div class="image"></div>
+      <div class="illustrate">
+        <h2>配送服務</h2>
+        <hr />
+        <p>
+          提供最快速且方便的配送服務<br />
+          讓您不再需要為了買東西而出遠門<br />
+          在家就能輕鬆購物
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Footer></Footer>
   <div class="test"></div>
 
   <!-- <div class="container"></div> -->
@@ -97,13 +122,21 @@
 import { Autoplay, Pagination, Navigation, EffectCoverflow } from 'swiper'
 import { useToast } from 'vue-toastification'
 import toast from '../mixins/ToastMessage'
-import UserNavbar from '@/components/UserNavbar.vue'
+import Footer from '@/components/Footer.vue'
 
 export default {
+  data() {
+    return {
+      showProducts: {},
+      isLoading: false
+    }
+  },
   mixins: [toast],
   components: {
-    UserNavbar
+    Footer
   },
+  // inject: ['emitter'],
+
   setup() {
     // Get toast interface
     const toast = useToast()
@@ -115,14 +148,34 @@ export default {
   methods: {
     test() {
       this.ToastMessage(2)
+    },
+    ProductDetail(id) {
+      this.$router.push(`/user/product/${id}`)
+    },
+    getData() {
+      this.isLoading = true
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
+          this.isLoading = false
+          this.showProducts = res.data.products.slice(0, 10)
+          console.log(this.showProducts)
+        }
+      })
     }
   },
   mounted() {
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 50) {
-        this.$refs.sectionFirst.classList.add('animate__fadeInUp')
-      }
-    })
+    if (window.pageYOffset < 50) {
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 50) {
+          this.$refs.sectionFirst.classList.add('animate__fadeInUp')
+        }
+      })
+    }
+  },
+
+  created() {
+    this.getData()
   }
 }
 </script>

@@ -40,7 +40,7 @@
 // :pages="{ 頁碼資訊 }"
 // @emitPages="更新頁面事件"
 export default {
-  props: ['pages', 'nowpage'],
+  props: ['pages', 'nowpage', 'isCategory'],
   methods: {
     updatePage(page) {
       this.$emit('changepage', page)

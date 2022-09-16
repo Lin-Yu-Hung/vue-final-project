@@ -33,20 +33,30 @@
       </swiper>
     </div>
   </section>
+  {{ EmitData }}
   <section class="product">
     <div class="list">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Library</li>
-        </ol>
-      </nav>
-      <div class="card" style="width: 100%">
-        <div class="card-header">Featured</div>
+      <Breadcrumb></Breadcrumb>
+      <div class="card bg-dark text-white" style="width: 100%">
+        <div class="card-header">商品分類</div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">An item</li>
-          <li class="list-group-item">A second item</li>
-          <li class="list-group-item">A third item</li>
+          <li
+            class="list-group-item"
+            @click.prevent="cFalse(), updateData(1)"
+            :class="{ active2: '所有商品' === nowChoose }"
+          >
+            所有商品
+          </li>
+
+          <li
+            class="list-group-item"
+            v-for="item in category"
+            :key="item"
+            @click.prevent="categoryData(item)"
+            :class="{ active2: item === nowChoose }"
+          >
+            {{ item }}
+          </li>
         </ul>
       </div>
     </div>
@@ -58,10 +68,24 @@
           v-for="item in showProducts"
           :key="item.id"
         >
-          <img :src="item.imageUrl" class="card-img-top" alt="..." />
+          <img
+            :src="item.imageUrl"
+            class="card-img-top"
+            :alt="item.title"
+            :title="item.title"
+          />
           <div class="card-body">
             <marquee>{{ item.content }}</marquee>
-            <h5 class="card-title">{{ item.title }}</h5>
+            <h5
+              class="card-title"
+              :class="{
+                'fs-6': item.title.length >= 60,
+                'fs-5': item.title.length >= 35,
+                'fs-4': item.title.length < 15
+              }"
+            >
+              {{ item.title }}
+            </h5>
             <div class="card-text">
               <small class="origin-price">原價{{ item.origin_price }}</small>
               <p class="price">優惠價${{ item.price }}</p>
@@ -86,18 +110,13 @@
         <Pagination2
           :pages="totalPage"
           :nowpage="nowPage"
+          :isCategory="isCategory"
           @changepage="updateData"
         ></Pagination2>
       </div>
     </div>
   </section>
-  <img
-    src="@/assets/up-arrow.png"
-    alt=""
-    @click="toTop"
-    class="toTop"
-    ref="toTop"
-  />
+  <ToTop></ToTop>
   <Footer></Footer>
 </template>
 <style lang="scss">
@@ -109,6 +128,8 @@ import emitter from '@/methods/emitter'
 import ToastMessage from '@/components/ToastMessage.vue'
 import Footer from '@/components/Footer.vue'
 import Pagination2 from '@/components/Pagination.vue'
+import Breadcrumb from '@/components/Breadcrumb.vue'
+import ToTop from '@/components/ToTop.vue'
 export default {
   data() {
     return {
@@ -117,7 +138,11 @@ export default {
       nowPage: 1,
       maxProductLen: 12,
       showProducts: {},
-      totalPage: 1
+      totalPage: 1,
+      category: [],
+      isCategory: false,
+      nowChoose: '所有商品',
+      EmitData: ''
     }
   },
   setup() {
@@ -126,7 +151,9 @@ export default {
   components: {
     ToastMessage,
     Footer,
-    Pagination2
+    Pagination2,
+    Breadcrumb,
+    ToTop
   },
   provide() {
     return {
@@ -149,40 +176,65 @@ export default {
             StartData - 1,
             this.maxProductLen * this.nowPage
           )
-
+          this.category = this.Products.map((e) => {
+            return e.category
+          })
+          this.category = this.category.filter((e, index, array) => {
+            return array.indexOf(e) === index
+          })
           this.totalPage = Math.trunc(this.Products.length / 12 + 1)
           this.isLoading = false
         }
       })
     },
     updateData(page) {
-      this.nowPage = page
-      const StartData =
-        this.nowPage * this.maxProductLen - this.maxProductLen + 1
-      this.showProducts = this.Products.slice(
-        // 取得目前頁面的12筆資料
-        StartData - 1,
-        this.maxProductLen * this.nowPage
-      )
-      this.totalPage = Math.trunc(this.Products.length / 12 + 1)
+      if (!this.isCategory) {
+        this.nowPage = page
+        const StartData =
+          this.nowPage * this.maxProductLen - this.maxProductLen + 1
+        this.showProducts = this.Products.slice(
+          // 取得目前頁面的12筆資料
+          StartData - 1,
+          this.maxProductLen * this.nowPage
+        )
+        this.totalPage = Math.trunc(this.Products.length / 12 + 1)
+      } else {
+        this.categoryUpdate(page)
+      }
     },
     ProductDetail(id) {
       this.$router.push(`/user/product/${id}`)
     },
-    toTop() {
-      window.document.documentElement.scrollTop = 0
+    categoryData(item) {
+      this.isCategory = true
+      this.nowChoose = item
+      this.showProducts = this.Products.filter((e) => {
+        return e.category === item
+      })
+      this.totalPage = Math.trunc(this.showProducts.length / 12 + 1)
+    },
+    categoryUpdate(page) {
+      this.nowPage = page
+      const StartData =
+        this.nowPage * this.maxProductLen - this.maxProductLen + 1
+      this.showProducts = this.showProducts.slice(
+        // 取得目前頁面的12筆資料
+        StartData - 1,
+        this.maxProductLen * this.nowPage
+      )
+    },
+    cFalse() {
+      this.nowChoose = '所有商品'
+      this.isCategory = false
     }
   },
+  inject: ['emitter'],
   created() {
     this.getData()
   },
   mounted() {
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 300) {
-        this.$refs.toTop.style.display = 'inline'
-      } else {
-        this.$refs.toTop.style.display = 'none'
-      }
+    this.emitter.on('PushEmit', (data) => {
+      console.log(data)
     })
   }
 }

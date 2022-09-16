@@ -42,7 +42,7 @@
         <div class="offcanvas-body navbar-dark bg-dark">
           <ul class="navbar-nav flex-grow-1 justify-content-end">
             <li class="nav-item">
-              <router-link class="nav-link" to="/">首頁</router-link>
+              <router-link class="nav-link" to="/user/userindex">首頁</router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/user/productlist"
@@ -66,8 +66,12 @@
       </div>
     </div>
   </nav>
+  <div class="hidden"></div>
 </template>
 <style lang="scss">
+.hidden {
+  height: 62px;
+}
 nav {
   z-index: 10;
   ul {
@@ -88,8 +92,13 @@ nav {
   }
 }
 @media screen and (max-width: 990px) {
+  .hidden {
+    height: 57.59px;
+  }
+
   nav {
     div.container-fluid {
+      padding: 0 3rem;
       button.btn {
         margin-top: 0.5rem;
       }

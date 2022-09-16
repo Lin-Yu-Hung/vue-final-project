@@ -3,10 +3,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/',
-    component: () => import('../views/Index.vue')
-  },
-  {
     path: '/login',
     component: () => import('@/views/Login.vue')
   },
@@ -15,6 +11,10 @@ const routes = [
     path: '/user',
     component: () => import('../views/User.vue'),
     children: [
+      {
+        path: 'userindex',
+        component: () => import('../views/Index.vue')
+      },
       {
         path: 'productlist',
         component: () => import('../views/ProductList.vue')

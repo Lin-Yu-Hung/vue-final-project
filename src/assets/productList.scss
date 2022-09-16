@@ -1,3 +1,7 @@
+.active2 {
+    background-color: rgb(222 226 230);
+}
+
 section.header {
     display: flex;
     justify-content: center;
@@ -36,7 +40,7 @@ section.product {
 
     .list {
         margin: 0rem 3rem;
-        flex: 1 1 auto;
+        flex: 1 1 170px;
         display: flex;
         flex-direction: column;
         justify-content: start;
@@ -44,6 +48,9 @@ section.product {
 
         nav {
             width: 100%;
+            font-size: 1.25rem;
+            li{
+            }
 
             .breadcrumb {
                 margin-bottom: 0.5rem;
@@ -53,11 +60,21 @@ section.product {
         .card {
             .card-header {
                 text-align: center;
-                font-size: 1.5rem;
+                font-size: 1.75rem;
+                font-weight: bolder;
             }
 
             ul {
-                li {}
+                li {
+                    text-align: center;
+                    font-size: 1.25rem;
+                    user-select: none;
+
+                    &:hover {
+                        background-color: rgb(222 226 230);
+                        cursor: pointer;
+                    }
+                }
             }
         }
     }
@@ -66,17 +83,21 @@ section.product {
         flex: 6 1 300px;
         display: flex;
         flex-direction: column;
+
         .productList {
             display: flex;
             flex-wrap: wrap;
+
             .card {
                 flex: 1 1 300px;
                 max-width: 300px;
                 margin: 0.5rem;
                 max-height: 560px;
+
                 &:hover {
                     box-shadow: 8px 8px 6px -4px rgb(42, 41, 41);
                 }
+
 
                 img {
                     height: 15vw;
@@ -85,7 +106,7 @@ section.product {
 
                 .card-body {
                     .card-title {
-                        min-height: 80px
+                        min-height: 60px
                     }
 
                     .card-text {
@@ -132,7 +153,8 @@ section.product {
                 }
             }
         }
-        .pagination{
+
+        .pagination {
             margin-top: 0.5rem;
             display: flex;
             justify-content: center;
@@ -140,7 +162,8 @@ section.product {
     }
 
 }
-.toTop{
+
+.toTop {
     cursor: pointer;
     border-radius: 50%;
     width: 6vw;
@@ -152,7 +175,23 @@ section.product {
     opacity: 0.5;
     transition: all 0.25s ease;
     display: none;
-    &:hover{
+
+    &:hover {
         opacity: 1;
+    }
+}
+
+@media screen and (max-width:1650px) {
+    section.product {
+        .products {
+            .productList {
+                .card{
+                    img{
+                        height: 20vw;
+                    }
+                }
+            }
+        }
+
     }
 }
