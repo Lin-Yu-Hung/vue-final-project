@@ -8,7 +8,6 @@
       </button>
     </div>
   </div>
-
   <section class="text" ref="sectionText">
     <h1>熱門商品</h1>
     <hr />
@@ -61,6 +60,9 @@
             >
               前往選購
             </button>
+            <button class="btn btn-success" @click.prevent="go(item.category)">
+              {{ item.category }}
+            </button>
           </div>
         </div>
       </swiper-slide>
@@ -112,8 +114,6 @@
 
   <Footer></Footer>
   <div class="test"></div>
-
-  <!-- <div class="container"></div> -->
 </template>
 <style lang="scss">
 @import '@/assets/index.scss';
@@ -128,15 +128,14 @@ export default {
   data() {
     return {
       showProducts: {},
-      isLoading: false
+      isLoading: false,
+      category: []
     }
   },
   mixins: [toast],
   components: {
     Footer
   },
-  // inject: ['emitter'],
-
   setup() {
     // Get toast interface
     const toast = useToast()
@@ -146,6 +145,9 @@ export default {
     }
   },
   methods: {
+    go(item) {
+      this.$router.push(`/user/productlist?query=${item}`)
+    },
     test() {
       this.ToastMessage(2)
     },
@@ -158,8 +160,15 @@ export default {
       this.$http.get(api).then((res) => {
         if (res.data.success) {
           this.isLoading = false
-          this.showProducts = res.data.products.slice(0, 10)
+          // this.showProducts = res.data.products.slice(0, 10)
+          this.showProducts = res.data.products
           console.log(this.showProducts)
+          this.category = this.showProducts.map((e) => {
+            return e.category
+          })
+          this.category = this.category.filter((e, index, array) => {
+            return array.indexOf(e) === index
+          })
         }
       })
     }

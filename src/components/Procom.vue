@@ -33,13 +33,12 @@
       </swiper>
     </div>
   </section>
-  {{ EmitData }}
+  {{ msg }}
   <section class="product">
     <div class="list">
       <Breadcrumb></Breadcrumb>
       <div class="card bg-dark text-white" style="width: 100%">
         <div class="card-header">商品分類</div>
-        <button @click="reload()">測試</button>
         <ul class="list-group list-group-flush">
           <li
             class="list-group-item"
@@ -146,7 +145,7 @@ export default {
       EmitData: ''
     }
   },
-  props: ['query'],
+  props: ['msg'],
   setup() {
     return { modules: [Autoplay, Pagination, Navigation, EffectCoverflow] }
   },
@@ -185,32 +184,6 @@ export default {
             return array.indexOf(e) === index
           })
           this.totalPage = Math.trunc(this.Products.length / 12 + 1)
-          this.isLoading = false
-        }
-      })
-    },
-    categoryGetData(item, page = 1) {
-      this.nowPage = page
-      this.isLoading = true
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
-      this.$http.get(api).then((res) => {
-        if (res.data.success) {
-          this.Products = res.data.products // 取得資料
-          const StartData =
-            this.nowPage * this.maxProductLen - this.maxProductLen + 1
-          this.showProducts = this.Products.slice(
-            // 取得目前頁面的12筆資料
-            StartData - 1,
-            this.maxProductLen * this.nowPage
-          )
-          this.category = this.Products.map((e) => {
-            return e.category
-          })
-          this.category = this.category.filter((e, index, array) => {
-            return array.indexOf(e) === index
-          })
-          this.totalPage = Math.trunc(this.Products.length / 12 + 1)
-          this.categoryData(item)
           this.isLoading = false
         }
       })
@@ -254,18 +227,16 @@ export default {
     cFalse() {
       this.nowChoose = '所有商品'
       this.isCategory = false
-    },
-    reload() {
-      location.reload()
     }
   },
   inject: ['emitter'],
   created() {
-    if (this.query) {
-      this.categoryGetData(this.query)
-    } else {
-      this.getData()
-    }
+    this.getData()
+  },
+  mounted() {
+    this.emitter.on('PushEmit', (data) => {
+      console.log(data)
+    })
   }
 }
 </script>

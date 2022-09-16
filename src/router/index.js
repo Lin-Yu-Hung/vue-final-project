@@ -12,12 +12,18 @@ const routes = [
     component: () => import('../views/User.vue'),
     children: [
       {
-        path: 'userindex',
+        path: 'index',
         component: () => import('../views/Index.vue')
       },
       {
         path: 'productlist',
-        component: () => import('../views/ProductList.vue')
+        component: () => import('../views/ProductList.vue'),
+        props: (route) => {
+          console.log(route.query)
+          return {
+            query: route.query.query
+          }
+        }
       },
       {
         path: 'cart',

@@ -42,7 +42,35 @@
         <div class="offcanvas-body navbar-dark bg-dark">
           <ul class="navbar-nav flex-grow-1 justify-content-end">
             <li class="nav-item">
-              <router-link class="nav-link" to="/user/userindex">首頁</router-link>
+              <router-link class="nav-link" to="/user/index">首頁</router-link>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdownMenuLink"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                商品列表
+              </a>
+              <ul
+                class="dropdown-menu"
+                aria-labelledby="navbarDropdownMenuLink"
+              >
+                <li>
+                  <a class="dropdown-item" href="#">所有商品</a>
+                </li>
+                <li v-for="item in category" :key="item">
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    @click.prevent="categoryPage(item)"
+                    >{{ item }}</a
+                  >
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/user/productlist"
@@ -127,6 +155,12 @@ nav {
 </style>
 <script>
 export default {
+  data() {
+    return {
+      showProducts: {},
+      category: []
+    }
+  },
   methods: {
     logout() {
       const api = `${process.env.VUE_APP_API}logout`
@@ -135,7 +169,30 @@ export default {
           this.$router.push('/login')
         }
       })
+    },
+    categoryPage(item) {
+      this.$router.push(`/user/productlist?query=${item}`)
+      console.log(this.$route.fullPath)
+    },
+
+    getData() {
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
+          this.showProducts = res.data.products
+          console.log(this.showProducts)
+          this.category = this.showProducts.map((e) => {
+            return e.category
+          })
+          this.category = this.category.filter((e, index, array) => {
+            return array.indexOf(e) === index
+          })
+        }
+      })
     }
+  },
+  created() {
+    this.getData()
   }
 }
 </script>
