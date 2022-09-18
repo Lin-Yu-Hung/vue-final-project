@@ -39,11 +39,10 @@
       <Breadcrumb></Breadcrumb>
       <div class="card bg-dark text-white" style="width: 100%">
         <div class="card-header">商品分類</div>
-        <button @click="reload()">測試</button>
         <ul class="list-group list-group-flush">
           <li
             class="list-group-item"
-            @click.prevent="cFalse(), updateData(1)"
+            @click.prevent="categoryData('所有商品')"
             :class="{ active2: '所有商品' === nowChoose }"
           >
             所有商品
@@ -234,12 +233,19 @@ export default {
       this.$router.push(`/user/product/${id}`)
     },
     categoryData(item) {
-      this.isCategory = true
-      this.nowChoose = item
-      this.showProducts = this.Products.filter((e) => {
-        return e.category === item
-      })
-      this.totalPage = Math.trunc(this.showProducts.length / 12 + 1)
+      if (item === '所有商品') {
+        this.emitter.emit('now-category', item)
+        this.cFalse()
+        this.updateData(1)
+      } else {
+        this.emitter.emit('now-category', item)
+        this.isCategory = true
+        this.nowChoose = item
+        this.showProducts = this.Products.filter((e) => {
+          return e.category === item
+        })
+        this.totalPage = Math.trunc(this.showProducts.length / 12 + 1)
+      }
     },
     categoryUpdate(page) {
       this.nowPage = page
@@ -254,9 +260,6 @@ export default {
     cFalse() {
       this.nowChoose = '所有商品'
       this.isCategory = false
-    },
-    reload() {
-      location.reload()
     }
   },
   inject: ['emitter'],
@@ -266,6 +269,11 @@ export default {
     } else {
       this.getData()
     }
+  },
+  mounted() {
+    this.emitter.on('push-category', (data) => {
+      this.categoryData(data)
+    })
   }
 }
 </script>

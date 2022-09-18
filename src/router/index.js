@@ -19,7 +19,6 @@ const routes = [
         path: 'productlist',
         component: () => import('../views/ProductList.vue'),
         props: (route) => {
-          console.log(route.query)
           return {
             query: route.query.query
           }

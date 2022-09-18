@@ -3,9 +3,9 @@
   <div class="background">
     <div class="context animate__animated animate__fadeInUp">
       <h1>釋放你的電競魂!!</h1>
-      <button type="button" class="btn btn-primary">
-        <a href="">開始選購</a>
-      </button>
+      <router-link to="/user/productlist"
+        ><button type="button" class="btn btn-primary">開始選購</button>
+      </router-link>
     </div>
   </div>
   <section class="text" ref="sectionText">

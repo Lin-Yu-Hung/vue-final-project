@@ -19,14 +19,11 @@
             font-size: 3.5vw;
         }
 
-        button {
-            // box-shadow: 0 18px 6px -6px rgb(42, 41, 41);
+        a {
 
-            padding: 1rem 3rem;
-
-            a {
+            button {
                 font-size: 2rem;
-                text-decoration: none;
+                padding: 1rem 3rem;
                 color: white;
                 font-weight: bolder;
             }
@@ -113,6 +110,7 @@ section.second {
 
     .text {
         margin: 0.5rem;
+
         h1 {
             font-weight: bolder;
             text-align: center;
@@ -142,6 +140,7 @@ section.second {
             object-fit: cover;
             background-size: cover;
         }
+
         .image2 {
             flex: 1 1 520px;
             background-image: url('@/assets/repair.jpg');
@@ -149,6 +148,7 @@ section.second {
             object-fit: cover;
             background-size: cover;
         }
+
         .image3 {
             flex: 1 1 520px;
             background-image: url('@/assets/service.jpg');
@@ -158,10 +158,11 @@ section.second {
         }
 
         .illustrate {
-            h2{
+            h2 {
                 margin-bottom: 0;
                 font-weight: bolder;
             }
+
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -169,7 +170,8 @@ section.second {
             flex: 1 1 520px;
             padding: 2rem;
             font-size: 1.5rem;
-            p{
+
+            p {
                 text-align: center;
             }
         }

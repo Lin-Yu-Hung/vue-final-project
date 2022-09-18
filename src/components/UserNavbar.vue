@@ -4,7 +4,13 @@
     style="box-shadow: 0 8px 6px -6px rgb(42, 41, 41)"
   >
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">UserNavbar</a>
+      <a class="navbar-brand" href="#">
+        <img
+          src="@/assets/logo3.png"
+          alt=""
+          class="d-inline-block align-text-top"
+        />
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -25,7 +31,13 @@
             <div class="row">
               <div class="col-11">
                 <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
-                  <router-link class="nav-link" to="/">UserNavbar</router-link>
+                  <a class="navbar-brand" href="#">
+                    <img
+                      src="@/assets/logo3.png"
+                      alt=""
+                      class="d-inline-block align-text-top"
+                    />
+                  </a>
                 </h5>
               </div>
               <div class="col-1">
@@ -52,30 +64,39 @@
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
+                :class="{ active: $route.path == '/user/productlist' }"
               >
                 商品列表
               </a>
               <ul
-                class="dropdown-menu"
+                class="dropdown-menu dropdown-menu-dark"
                 aria-labelledby="navbarDropdownMenuLink"
               >
-                <li>
-                  <a class="dropdown-item" href="#">所有商品</a>
-                </li>
-                <li v-for="item in category" :key="item">
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click.prevent="categoryPage(item)"
-                    >{{ item }}</a
+                <li
+                  class="dropdown-item"
+                  :class="{
+                    active3:
+                      '所有商品' == nowChoose &&
+                      $route.path == '/user/productlist'
+                  }"
+                >
+                  <a href="#" @click.prevent="categoryPage('所有商品')"
+                    >所有商品</a
                   >
                 </li>
+
+                <li
+                  v-for="item in category"
+                  :key="item"
+                  class="dropdown-item"
+                  :class="{
+                    active3:
+                      item == nowChoose && $route.path == '/user/productlist'
+                  }"
+                >
+                  <a href="#" @click.prevent="categoryPage(item)">{{ item }}</a>
+                </li>
               </ul>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/user/productlist"
-                >商品列表</router-link
-              >
             </li>
           </ul>
           <!-- <a href="./cart_login.html"
@@ -98,17 +119,39 @@
 </template>
 <style lang="scss">
 .hidden {
-  height: 62px;
+  height: 110px;
 }
 nav {
   z-index: 10;
+  li.dropdown-item {
+    &:active {
+      background-color: rgb(82 87 92);
+    }
+
+    a {
+      color: white;
+      &:hover {
+        color: white;
+      }
+
+      text-decoration: none;
+    }
+  }
   ul {
     li {
-      font-size: 1.25rem;
+      padding-top: 0.5rem;
+      font-size: 1.5rem;
     }
   }
   div.container-fluid {
-    padding: 0rem 9rem;
+    padding: 0rem 8rem;
+    a {
+      img {
+        width: 11.5vw;
+        height: 4.25vw;
+      }
+    }
+
     button {
       padding: 0.3rem 1rem;
       &:hover {
@@ -119,14 +162,18 @@ nav {
     }
   }
 }
-@media screen and (max-width: 990px) {
+@media screen and (max-width: 1660px) {
   .hidden {
-    height: 57.59px;
+    height: 93.68px;
   }
-
+}
+@media screen and (max-width: 990px) {
   nav {
     div.container-fluid {
       padding: 0 3rem;
+      a {
+        margin-left: 30px;
+      }
       button.btn {
         margin-top: 0.5rem;
       }
@@ -154,13 +201,19 @@ nav {
 }
 </style>
 <script>
+import emitter from '@/methods/emitter'
 export default {
   data() {
     return {
       showProducts: {},
-      category: []
+      category: [],
+      nowChoose: ''
     }
   },
+  provide() {
+    return { emitter }
+  },
+  inject: ['emitter'],
   methods: {
     logout() {
       const api = `${process.env.VUE_APP_API}logout`
@@ -171,8 +224,9 @@ export default {
       })
     },
     categoryPage(item) {
+      this.nowChoose = item
       this.$router.push(`/user/productlist?query=${item}`)
-      console.log(this.$route.fullPath)
+      this.emitter.emit('push-category', item)
     },
 
     getData() {
@@ -193,6 +247,12 @@ export default {
   },
   created() {
     this.getData()
+  },
+  mounted() {
+    this.emitter.on('now-category', (data) => {
+      console.log('usernav' + data)
+      this.nowChoose = data
+    })
   }
 }
 </script>

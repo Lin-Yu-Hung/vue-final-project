@@ -1,8 +1,49 @@
-footer{
+footer {
     width: 100%;
-    padding: 2rem;
-    h1{
-        color: white;
-        text-align: center;
+    padding: 1rem 2rem;
+
+    .container-fluid {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+
+
+        .copyright {
+            border-right: 2px solid white;
+            flex: 1 1 300px;
+            display: flex;
+            justify-content: end;
+
+            .copyright-context {
+                padding-right: 1.5rem;
+                text-align: center;
+
+                img {
+                    width: 14vw;
+                    height: 6vw;
+                }
+
+                p {
+                    color: white;
+                    margin-bottom: 0;
+                }
+            }
+
+        }
+
+        .author {
+            flex: 1 1 300px;
+            display: flex;
+            align-items: center;
+            padding-left: 1.5rem;
+
+            p {
+                font-size: 3rem;
+                color: white;
+            }
+        }
+
+
     }
+
 }
