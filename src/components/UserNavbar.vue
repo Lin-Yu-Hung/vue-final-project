@@ -58,12 +58,14 @@
             </li>
             <li class="nav-item dropdown">
               <a
+                ref="dropdown"
                 class="nav-link dropdown-toggle"
                 href="#"
                 id="navbarDropdownMenuLink"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
+                @click.prevent="toggle()"
                 :class="{ active: $route.path == '/user/productlist' }"
               >
                 商品列表
@@ -71,6 +73,7 @@
               <ul
                 class="dropdown-menu dropdown-menu-dark"
                 aria-labelledby="navbarDropdownMenuLink"
+                data-bs-auto-close="true"
               >
                 <li
                   class="dropdown-item"
@@ -79,10 +82,9 @@
                       '所有商品' == nowChoose &&
                       $route.path == '/user/productlist'
                   }"
+                  @click.prevent="categoryPage('所有商品')"
                 >
-                  <a href="#" @click.prevent="categoryPage('所有商品')"
-                    >所有商品</a
-                  >
+                  <a href="#">所有商品</a>
                 </li>
 
                 <li
@@ -93,24 +95,13 @@
                     active3:
                       item == nowChoose && $route.path == '/user/productlist'
                   }"
+                  @click.prevent="categoryPage(item)"
                 >
-                  <a href="#" @click.prevent="categoryPage(item)">{{ item }}</a>
+                  <a href="#">{{ item }}</a>
                 </li>
               </ul>
             </li>
           </ul>
-          <!-- <a href="./cart_login.html"
-            ><button
-              style="margin-right: 1rem"
-              type="button"
-              class="btn btn-success btn-mr"
-            >
-              登入
-            </button></a
-          >
-          <a href="./cart_reg.html"
-            ><button type="button" class="btn btn-info btn-mr">註冊</button></a
-          > -->
         </div>
       </div>
     </div>
@@ -118,12 +109,17 @@
   <div class="hidden"></div>
 </template>
 <style lang="scss">
+a {
+  user-select: none;
+}
+
 .hidden {
   height: 110px;
 }
 nav {
   z-index: 10;
   li.dropdown-item {
+    cursor: pointer;
     &:active {
       background-color: rgb(82 87 92);
     }
@@ -202,12 +198,14 @@ nav {
 </style>
 <script>
 import emitter from '@/methods/emitter'
+import Dropdown from 'bootstrap/js/dist/dropdown'
 export default {
   data() {
     return {
       showProducts: {},
       category: [],
-      nowChoose: ''
+      nowChoose: '',
+      dropdown: {}
     }
   },
   provide() {
@@ -227,6 +225,10 @@ export default {
       this.nowChoose = item
       this.$router.push(`/user/productlist?query=${item}`)
       this.emitter.emit('push-category', item)
+      this.dropdown.hide()
+    },
+    toggle() {
+      this.dropdown.toggle()
     },
 
     getData() {
@@ -253,6 +255,7 @@ export default {
       console.log('usernav' + data)
       this.nowChoose = data
     })
+    this.dropdown = new Dropdown(this.$refs.dropdown)
   }
 }
 </script>

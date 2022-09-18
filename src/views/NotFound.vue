@@ -9,7 +9,7 @@
             Sorry, an error has occured, Requested page not found!
           </div>
           <div class="error-actions">
-            <router-link class="btn btn-primary btn-lg" to="/user/cart"
+            <router-link class="btn btn-primary btn-lg" to="/user/index"
               >回首頁</router-link
             >
           </div>

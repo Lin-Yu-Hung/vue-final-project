@@ -162,7 +162,6 @@ export default {
           this.isLoading = false
           // this.showProducts = res.data.products.slice(0, 10)
           this.showProducts = res.data.products
-          console.log(this.showProducts)
           this.category = this.showProducts.map((e) => {
             return e.category
           })
