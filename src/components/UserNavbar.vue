@@ -162,9 +162,6 @@ nav {
   }
 }
 @media screen and (max-width: 1660px) {
-  .hidden {
-    height: 93.68px;
-  }
 }
 @media screen and (max-width: 990px) {
   nav {
@@ -239,7 +236,6 @@ export default {
       this.$http.get(api).then((res) => {
         if (res.data.success) {
           this.showProducts = res.data.products
-          console.log(this.showProducts)
           this.category = this.showProducts.map((e) => {
             return e.category
           })
@@ -255,11 +251,13 @@ export default {
   },
   mounted() {
     this.emitter.on('now-category', (data) => {
-      console.log('usernav' + data)
       this.nowChoose = data
     })
     this.dropdown = new Dropdown(this.$refs.dropdown)
-    this.$refs.hidden.style.height = `${this.$refs.navbar.offsetHeight}px`
+    this.$refs.hidden.style.height = `${this.$refs.navbar.offsetHeight - 1}px`
+    window.onresize = () => {
+      this.$refs.hidden.style.height = `${this.$refs.navbar.offsetHeight - 1}px`
+    }
   }
 }
 </script>
