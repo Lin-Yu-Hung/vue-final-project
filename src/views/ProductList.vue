@@ -116,7 +116,6 @@
       </div>
     </div>
   </section>
-  <ToTop></ToTop>
   <Footer></Footer>
 </template>
 <style lang="scss">
@@ -129,7 +128,6 @@ import ToastMessage from '@/components/ToastMessage.vue'
 import Footer from '@/components/Footer.vue'
 import Pagination2 from '@/components/Pagination.vue'
 import Breadcrumb from '@/components/Breadcrumb.vue'
-import ToTop from '@/components/ToTop.vue'
 export default {
   data() {
     return {
@@ -153,8 +151,7 @@ export default {
     ToastMessage,
     Footer,
     Pagination2,
-    Breadcrumb,
-    ToTop
+    Breadcrumb
   },
   provide() {
     return {

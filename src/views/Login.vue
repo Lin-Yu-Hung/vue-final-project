@@ -1,6 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="container mt-5">
+  <div class="container mt-5 justify-content-center">
+    <div class="logo">
+      <img src="@/assets/logo3.png" alt="" />
+    </div>
     <form class="row justify-content-center" @submit.prevent="signIn">
       <div class="col-md-6">
         <h1 class="h3 mb-3 font-weight-normal">請先登入</h1>
@@ -29,6 +32,15 @@
         </div>
 
         <div class="text-end mt-4">
+          <router-link to="/user/index"
+            ><button
+              class="btn btn-lg btn-secondary btn-block me-3"
+              type="submit"
+            >
+              回首頁
+            </button>
+          </router-link>
+
           <button class="btn btn-lg btn-primary btn-block" type="submit">
             登入
           </button>
@@ -37,7 +49,17 @@
     </form>
   </div>
 </template>
-
+<style lang="scss">
+.container {
+  .logo {
+    img {
+      display: block;
+      margin: auto;
+      width: 20vw;
+    }
+  }
+}
+</style>
 <script>
 export default {
   data() {

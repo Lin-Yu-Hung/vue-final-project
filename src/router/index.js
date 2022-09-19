@@ -30,7 +30,7 @@ const routes = [
       },
       {
         path: 'product/:productId',
-        component: () => import('../views/UserProduct.vue')
+        component: () => import('../views/ProductDetail.vue')
       }
     ]
   },

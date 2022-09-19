@@ -2,6 +2,7 @@
   <nav
     class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top"
     style="box-shadow: 0 8px 6px -6px rgb(42, 41, 41)"
+    ref="navbar"
   >
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
@@ -101,21 +102,23 @@
                 </li>
               </ul>
             </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/dashboard/products/"
+                >後台管理</router-link
+              >
+            </li>
           </ul>
         </div>
       </div>
     </div>
   </nav>
-  <div class="hidden"></div>
+  <div class="hidden" ref="hidden"></div>
 </template>
 <style lang="scss">
 a {
   user-select: none;
 }
 
-.hidden {
-  height: 110px;
-}
 nav {
   z-index: 10;
   li.dropdown-item {
@@ -256,6 +259,7 @@ export default {
       this.nowChoose = data
     })
     this.dropdown = new Dropdown(this.$refs.dropdown)
+    this.$refs.hidden.style.height = `${this.$refs.navbar.offsetHeight}px`
   }
 }
 </script>
