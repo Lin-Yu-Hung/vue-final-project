@@ -16,6 +16,7 @@ section.productDetail {
     display: flex;
     flex-direction: column;
     margin-bottom: 2rem;
+    padding: 1rem 2rem;
 
     .detail {
         display: flex;
@@ -38,15 +39,23 @@ section.productDetail {
             justify-content: space-between;
 
             p {
-                font-size: 1.25rem;
+                font-size: 1.15rem;
                 white-space: pre-line;
+                margin-bottom: 0;
             }
 
             .card-btn {
                 padding: 0rem;
 
                 .price {
-                    padding: 2rem;
+                    small {
+                        color: gray;
+                        text-decoration: line-through;
+                        font-weight: normal;
+                        font-size: 1.5rem;
+                    }
+
+                    padding: 0.5rem 1rem;
                     font-weight: bolder;
                     color: red;
                 }
@@ -55,6 +64,34 @@ section.productDetail {
                     padding: 1rem;
                     font-size: 1.15rem;
                     font-weight: bolder;
+                }
+            }
+        }
+    }
+}
+
+section.Similar-products {
+    .swiper {
+        padding: 2rem 0rem;
+        width: 85%;
+
+        .swiper-slide {
+            .card {
+                .card-body {
+                    .card-text {
+                        .origin-price {
+                            text-decoration: line-through;
+                            color: gray;
+                        }
+
+                        .price {
+                            text-align: end;
+                            color: red;
+                            font-weight: bolder;
+                            font-size: 1.5rem;
+                            margin-bottom: 0.5rem;
+                        }
+                    }
                 }
             }
         }

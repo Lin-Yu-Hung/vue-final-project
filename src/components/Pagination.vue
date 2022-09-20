@@ -43,7 +43,12 @@ export default {
   props: ['pages', 'nowpage', 'isCategory'],
   methods: {
     updatePage(page) {
-      this.$emit('changepage', page)
+      if (page === this.nowpage) {
+        this.$emit('changepage', page)
+      } else {
+        this.$emit('changepage', page)
+        this.$emit('onTop')
+      }
     }
   }
 }

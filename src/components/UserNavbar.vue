@@ -143,7 +143,7 @@ nav {
     }
   }
   div.container-fluid {
-    padding: 0rem 8rem;
+    padding: 0rem 10rem;
     a {
       img {
         width: 11.5vw;

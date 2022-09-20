@@ -46,25 +46,38 @@
                   @change="uploadFile"
                 />
               </div>
-              <img class="img-fluid" alt="" />
-              <!-- 延伸技巧，多圖 -->
-              <div class="mt-5">
-                <div class="mb-3 input-group">
-                  <input
-                    type="url"
-                    class="form-control form-control"
-                    placeholder="請輸入連結"
-                  />
-                  <button type="button" class="btn btn-outline-danger">
-                    移除
-                  </button>
-                </div>
-                <div>
-                  <button class="btn btn-outline-primary btn-sm d-block w-100">
-                    新增圖片
-                  </button>
-                </div>
+              <img
+                class="img-fluid"
+                :alt="tempProduct.title"
+                :src="tempProduct.imageUrl"
+                :title="tempProduct.title"
+              />
+              <div class="mb-3">
+                <label for="customFile" class="form-label"
+                  >上傳更多產品圖片
+                  <i class="fas fa-spinner fa-spin"></i>
+                </label>
+                <input
+                  multiple="multiple"
+                  type="file"
+                  id="customFile"
+                  class="form-control"
+                  ref="fileImages"
+                  @change="uploadImages"
+                />
               </div>
+
+              <!-- <div>
+                <button
+                  class="btn btn-outline-primary btn-sm d-block w-100"
+                  @click="addImage()"
+                  :class="{ disabled: childLen == 15 }"
+                >
+                  {{ childLen == 15 ? '最多新增五筆' : '新增資料' }}
+                </button>
+              </div>
+
+              <div class="mt-5" ref="images"></div> -->
             </div>
 
             <div class="col-sm-8">
@@ -220,6 +233,8 @@
 import mixinsModal from '@/mixins/modalMixins'
 export default {
   mixins: [mixinsModal],
+  inject: ['emitter'],
+
   props: {
     product: {
       type: Object,
@@ -238,7 +253,8 @@ export default {
   data() {
     return {
       modal: {},
-      tempProduct: {}
+      tempProduct: {},
+      childLen: 0
     }
   },
   methods: {
@@ -257,7 +273,43 @@ export default {
           this.tempProduct.imageUrl = res.data.imageUrl
         }
       })
+    },
+    uploadImages() {
+      const uploadedFile = this.$refs.fileImages.files
+      const formData = new FormData()
+      formData.append('file-to-upload', uploadedFile)
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
+      this.$http
+        .post(api, formData)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
+    // // addImage() {
+    // //   this.$refs.images.innerHTML += `
+    // //   <label for="images">請輸入連結 </label>
+    // //   <br />
+    // //   <div class="mb-3 input-group mt-3">
+    // //   <input
+    // //                 type="url"
+    // //                 id="images"
+    // //                 class="form-control form-control"
+    // //                 placeholder="請輸入連結"
+    // //               />
+    // //               <button type="button" class="btn btn-outline-danger">
+    // //                 移除
+    // //               </button>
+    // //             </div>
+
+    // //   `
+    // //   this.childLen = this.$refs.images.childElementCount
+    // // }
+  },
+  mounted() {
+    this.emitter.on('init', (data) => {})
   }
 }
 </script>

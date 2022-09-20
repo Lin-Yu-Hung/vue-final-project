@@ -124,9 +124,11 @@ export default {
       if (isNew) {
         this.modalTitle = '新增資料'
         this.tempProduct = {}
+        this.emitter.emit('init', 0)
       } else {
         this.modalTitle = '編輯資料'
         this.tempProduct = { ...item }
+        this.emitter.emit('init', 0)
       }
       this.$refs.ProductModal.showModal()
     },
@@ -143,7 +145,6 @@ export default {
       }
 
       this.$http[httpMethod](api, { data: item }).then((res) => {
-        console.log(res)
         console.log(res.data.success)
         if (res.data.success) {
           this.$refs.ProductModal.hideModal()

@@ -47,6 +47,7 @@
                 'fs-5': item.title.length >= 35,
                 'fs-4': item.title.length < 15
               }"
+              style="color:black"
             >
               {{ item.title }}
             </h5>
@@ -59,9 +60,6 @@
               @click.prevent="ProductDetail(item.id)"
             >
               前往選購
-            </button>
-            <button class="btn btn-success" @click.prevent="go(item.category)">
-              {{ item.category }}
             </button>
           </div>
         </div>

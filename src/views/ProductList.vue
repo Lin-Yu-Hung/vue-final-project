@@ -3,7 +3,7 @@
   <Loading :active="isLoading"></Loading>
   <ToastMessage></ToastMessage>
   <router-view />
-  <section class="header">
+  <section class="header" ref="header">
     <div class="header">
       <swiper
         :spaceBetween="30"
@@ -78,8 +78,9 @@
             <marquee>{{ item.content }}</marquee>
             <h5
               class="card-title"
+              style="color: black"
               :class="{
-                'fs-6': item.title.length >= 60,
+                'fs-6': item.title.length >= 45,
                 'fs-5': item.title.length >= 35,
                 'fs-4': item.title.length < 15
               }"
@@ -112,6 +113,7 @@
           :nowpage="nowPage"
           :isCategory="isCategory"
           @changepage="updateData"
+          @onTop="onTop"
         ></Pagination2>
       </div>
     </div>
@@ -140,7 +142,8 @@ export default {
       category: [],
       isCategory: false,
       nowChoose: '所有商品',
-      EmitData: ''
+      EmitData: '',
+      categoryProduct: {}
     }
   },
   props: ['query'],
@@ -180,7 +183,7 @@ export default {
           this.category = this.category.filter((e, index, array) => {
             return array.indexOf(e) === index
           })
-          this.totalPage = Math.trunc(this.Products.length / 12 + 1)
+          this.totalPage = Math.ceil(this.Products.length / this.maxProductLen)
           this.isLoading = false
         }
       })
@@ -195,7 +198,7 @@ export default {
           const StartData =
             this.nowPage * this.maxProductLen - this.maxProductLen + 1
           this.showProducts = this.Products.slice(
-            // 取得目前頁面的12筆資料
+            // 取得目前頁面的this.maxProductLen筆資料
             StartData - 1,
             this.maxProductLen * this.nowPage
           )
@@ -205,7 +208,7 @@ export default {
           this.category = this.category.filter((e, index, array) => {
             return array.indexOf(e) === index
           })
-          this.totalPage = Math.trunc(this.Products.length / 12 + 1)
+
           this.categoryData(item)
           this.isLoading = false
         }
@@ -217,19 +220,21 @@ export default {
         const StartData =
           this.nowPage * this.maxProductLen - this.maxProductLen + 1
         this.showProducts = this.Products.slice(
-          // 取得目前頁面的12筆資料
+          // 取得目前頁面的this.maxProductLen筆資料
           StartData - 1,
           this.maxProductLen * this.nowPage
         )
-        this.totalPage = Math.trunc(this.Products.length / 12 + 1)
+        this.totalPage = Math.ceil(this.Products.length / this.maxProductLen)
       } else {
         this.categoryUpdate(page)
       }
     },
     ProductDetail(id) {
       this.$router.push(`/user/product/${id}`)
+      // this.emitter.emit('Similar-products', this.Products)
     },
     categoryData(item) {
+      this.nowPage = 1
       if (item === '所有商品') {
         this.emitter.emit('now-category', item)
         this.cFalse()
@@ -238,17 +243,28 @@ export default {
         this.emitter.emit('now-category', item)
         this.isCategory = true
         this.nowChoose = item
-        this.showProducts = this.Products.filter((e) => {
+        this.categoryProduct = this.Products.filter((e) => {
           return e.category === item
         })
-        this.totalPage = Math.trunc(this.showProducts.length / 12 + 1)
+        const StartData =
+          this.nowPage * this.maxProductLen - this.maxProductLen + 1
+        this.showProducts = this.categoryProduct.slice(
+          // 取得目前頁面的this.maxProductLen筆資料
+          StartData - 1,
+          this.maxProductLen * this.nowPage
+        )
+
+        this.totalPage = Math.ceil(
+          this.categoryProduct.length / this.maxProductLen
+        )
       }
     },
     categoryUpdate(page) {
       this.nowPage = page
       const StartData =
         this.nowPage * this.maxProductLen - this.maxProductLen + 1
-      this.showProducts = this.showProducts.slice(
+
+      this.showProducts = this.categoryProduct.slice(
         // 取得目前頁面的12筆資料
         StartData - 1,
         this.maxProductLen * this.nowPage
@@ -257,6 +273,10 @@ export default {
     cFalse() {
       this.nowChoose = '所有商品'
       this.isCategory = false
+    },
+    onTop() {
+      window.document.body.scrollTop = this.$refs.header.offsetHeight
+      window.document.documentElement.scrollTop = this.$refs.header.offsetHeight
     }
   },
   inject: ['emitter'],
