@@ -1,17 +1,20 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <Navbar></Navbar>
+  <!-- <Navbar></Navbar> -->
+  <UserNavbar></UserNavbar>
   <ToastMessage></ToastMessage>
   <router-view />
 </template>
 <script>
-import Navbar from '../components/Navbar.vue'
+// import Navbar from '../components/Navbar.vue'
 import emitter from '@/methods/emitter'
 import ToastMessage from '@/components/ToastMessage.vue'
+import UserNavbar from '@/components/UserNavbar.vue'
 export default {
   components: {
-    Navbar,
-    ToastMessage
+    // Navbar,
+    ToastMessage,
+    UserNavbar
   },
   provide() {
     return {

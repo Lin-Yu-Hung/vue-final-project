@@ -107,6 +107,11 @@
                 >後台管理</router-link
               >
             </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/login"
+                >登入</router-link
+              >
+            </li>
           </ul>
         </div>
       </div>

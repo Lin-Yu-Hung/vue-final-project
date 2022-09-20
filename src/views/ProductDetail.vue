@@ -38,7 +38,6 @@
     <h1 class="text-center">您可能有興趣</h1>
     <hr />
     <swiper
-
       :slidesPerView="1"
       :spaceBetween="10"
       :breakpoints="{
@@ -66,10 +65,10 @@
           <div class="card-body d-grid gap-2">
             <h5
               class="card-title"
-              style="min-height: 60px"
+              style="min-height: 60px; color: black"
               :class="{
-                'fs-6': item.title.length >= 40,
-                'fs-5': item.title.length >= 35,
+                'fs-6': item.title.length >= 34,
+                'fs-5': item.title.length >= 25,
                 'fs-4': item.title.length < 15
               }"
             >
@@ -147,6 +146,11 @@ export default {
               e.title !== this.product.title
             )
           })
+          if (this.SimilarProducts.length < 3) {
+            this.SimilarProducts = this.products.filter((e) => {
+              return e.title !== this.product.title
+            })
+          }
         }
       })
     },
@@ -158,12 +162,15 @@ export default {
           e.category === this.product.category && e.title !== this.product.title
         )
       })
-
+      if (this.SimilarProducts.length < 3) {
+        this.SimilarProducts = this.products.filter((e) => {
+          return e.title !== this.product.title
+        })
+      }
       window.document.body.scrollTop = 0
       window.document.documentElement.scrollTop = 0
     }
   },
-  mounted() {
-  }
+  mounted() {}
 }
 </script>

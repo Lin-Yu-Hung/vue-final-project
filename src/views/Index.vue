@@ -43,8 +43,8 @@
             <h5
               class="card-title"
               :class="{
-                'fs-6': item.title.length >= 40,
-                'fs-5': item.title.length >= 35,
+                'fs-6': item.title.length >= 34,
+                'fs-5': item.title.length >= 25,
                 'fs-4': item.title.length < 15
               }"
               style="color:black"
