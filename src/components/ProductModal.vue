@@ -52,7 +52,7 @@
                 :src="tempProduct.imageUrl"
                 :title="tempProduct.title"
               />
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label for="customFile" class="form-label"
                   >上傳更多產品圖片
                   <i class="fas fa-spinner fa-spin"></i>
@@ -65,7 +65,7 @@
                   ref="fileImages"
                   @change="uploadImages"
                 />
-              </div>
+              </div> -->
 
               <!-- <div>
                 <button
