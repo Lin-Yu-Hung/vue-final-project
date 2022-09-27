@@ -270,7 +270,8 @@ export default {
     return {
       modal: {},
       tempProduct: {},
-      childLen: 0
+      childLen: 0,
+      imagesUrl: []
     }
   },
   methods: {
@@ -291,13 +292,19 @@ export default {
       })
     },
     uploadImages() {
-      const example = new Promise((resolve) => {
-        resolve(console.log('test'))
-      })
-      example
+      const example = (status) => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            if (status) {
+              resolve('成功!!')
+            }
+          })
+        })
+      }
+      example(true)
         .then(() => {
           const uploadedFile = this.$refs.fileImages.files
-          const imagesUrl = []
+          this.imagesUrl = []
           this.tempProduct.imagesUrl = ''
           for (let i = 0; i < uploadedFile.length; i++) {
             const formData = new FormData()
@@ -305,16 +312,14 @@ export default {
             const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
             this.$http.post(api, formData).then((res) => {
               console.log(res.data.imageUrl)
-              imagesUrl.push(res.data.imageUrl)
+              this.imagesUrl.push(res.data.imageUrl)
             })
           }
-          return imagesUrl
+          return example(true)
         })
-        .then((item) => {
-          setTimeout(() => {
-            this.tempProduct.imagesUrl = item
-            console.log(this.tempProduct.imagesUrl)
-          }, 4000)
+        .then(() => {
+          this.tempProduct.imagesUrl = this.imagesUrl
+          console.log(this.tempProduct.imagesUrl)
         })
     }
     // // addImage() {
