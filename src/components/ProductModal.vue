@@ -52,7 +52,7 @@
                 :src="tempProduct.imageUrl"
                 :title="tempProduct.title"
               />
-              <!-- <div class="mb-3">
+              <div class="mb-3">
                 <label for="customFile" class="form-label"
                   >上傳更多產品圖片
                   <i class="fas fa-spinner fa-spin"></i>
@@ -65,19 +65,7 @@
                   ref="fileImages"
                   @change="uploadImages"
                 />
-              </div> -->
-
-              <!-- <div>
-                <button
-                  class="btn btn-outline-primary btn-sm d-block w-100"
-                  @click="addImage()"
-                  :class="{ disabled: childLen == 15 }"
-                >
-                  {{ childLen == 15 ? '最多新增五筆' : '新增資料' }}
-                </button>
               </div>
-
-              <div class="mt-5" ref="images"></div> -->
             </div>
 
             <div class="col-sm-8">
@@ -204,6 +192,34 @@
                     </label>
                   </div>
                 </div>
+                <div class="container">
+                  <div class="row row-cols-3">
+                    <div
+                      class="col"
+                      v-for="(item, index) in tempProduct.imagesUrl"
+                      :key="index"
+                    >
+                      <input
+                        type="text"
+                        class="form-control mb-2"
+                        name=""
+                        id=""
+                        v-model="tempProduct.imagesUrl"
+                      />
+                      <img
+                        :src="item"
+                        alt=""
+                        style="
+                          width: 90%;
+                          height: 130px;
+                          display: block;
+                          margin: auto;
+                        "
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div class="modal-footer">
                   <button
                     type="button"
@@ -215,7 +231,7 @@
                   <button
                     type="submit"
                     class="btn btn-primary"
-                    @click="$emit('updateProduct', tempProduct)"
+                    @click="$emit('updateProduct', tempProduct, imagesUrl)"
                   >
                     <!-- 設定emit事件名為updateproduct並傳出參數為tempproduct -->
                     確認
@@ -275,17 +291,30 @@ export default {
       })
     },
     uploadImages() {
-      const uploadedFile = this.$refs.fileImages.files
-      const formData = new FormData()
-      formData.append('file-to-upload', uploadedFile)
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
-      this.$http
-        .post(api, formData)
-        .then((res) => {
-          console.log(res)
+      const example = new Promise((resolve) => {
+        resolve(console.log('test'))
+      })
+      example
+        .then(() => {
+          const uploadedFile = this.$refs.fileImages.files
+          const imagesUrl = []
+          this.tempProduct.imagesUrl = ''
+          for (let i = 0; i < uploadedFile.length; i++) {
+            const formData = new FormData()
+            formData.append('file-to-upload', uploadedFile[i])
+            const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
+            this.$http.post(api, formData).then((res) => {
+              console.log(res.data.imageUrl)
+              imagesUrl.push(res.data.imageUrl)
+            })
+          }
+          return imagesUrl
         })
-        .catch((err) => {
-          console.log(err)
+        .then((item) => {
+          setTimeout(() => {
+            this.tempProduct.imagesUrl = item
+            console.log(this.tempProduct.imagesUrl)
+          }, 4000)
         })
     }
     // // addImage() {
