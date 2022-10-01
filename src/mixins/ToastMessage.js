@@ -7,9 +7,9 @@ export default {
     }
   },
   methods: {
-    ToastMessage(num) {
+    ToastMessage(num, value) {
       if (num === 1) {
-        this.toast.success('加入成功', {
+        this.toast.success(value, {
           position: 'top-right',
           timeout: 2500,
           closeOnClick: true,
@@ -24,7 +24,7 @@ export default {
           rtl: false
         })
       } else {
-        this.toast.error('錯誤', {
+        this.toast.error(value, {
           position: 'top-right',
           timeout: 2500,
           closeOnClick: true,

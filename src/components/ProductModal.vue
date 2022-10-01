@@ -64,6 +64,7 @@
                   class="form-control"
                   ref="fileImages"
                   @change="uploadImages"
+                  accept="image/*"
                 />
               </div>
             </div>
@@ -195,17 +196,27 @@
                 <div class="container">
                   <div class="row row-cols-3">
                     <div
-                      class="col"
+                      class="col mb-4"
                       v-for="(item, index) in tempProduct.imagesUrl"
-                      :key="index"
+                      :key="item"
                     >
-                      <input
-                        type="text"
-                        class="form-control mb-2"
-                        name=""
-                        id=""
-                        v-model="tempProduct.imagesUrl"
-                      />
+                      <div class="input-group flex-nowrap mb-2">
+                        <span
+                          class="input-group-text"
+                          id="addon-wrapping"
+                          @click="tempProduct.imagesUrl.splice(index, 1)"
+                          >X</span
+                        >
+                        <!-- splice 第一個參數為位置,刪除數量,刪除後插入的參數(若無可省略) -->
+                        <input
+                          @change="updateImage()"
+                          type="text"
+                          class="form-control"
+                          name=""
+                          id=""
+                          v-model="tempProduct.imagesUrl[index]"
+                        />
+                      </div>
                       <img
                         :src="item"
                         alt=""
@@ -245,10 +256,19 @@
     </div>
   </div>
 </template>
+<style lang="scss">
+.input-group-text {
+  cursor: pointer;
+  user-select: none;
+}
+</style>
 <script>
+import { useToast } from 'vue-toastification'
 import mixinsModal from '@/mixins/modalMixins'
+import toast from '../mixins/ToastMessage'
+
 export default {
-  mixins: [mixinsModal],
+  mixins: [mixinsModal, toast],
   inject: ['emitter'],
 
   props: {
@@ -261,9 +281,21 @@ export default {
     // eslint-disable-next-line vue/require-prop-type-constructor
     title: ''
   },
+  setup() {
+    // Get toast interface
+    const toast = useToast()
+    return {
+      toast
+    }
+  },
   watch: {
     product() {
       this.tempProduct = this.product
+      if (this.product.imagesUrl) {
+        this.tempProduct.imagesUrl = this.product.imagesUrl.filter((e) => {
+          return e !== ''
+        })
+      }
     }
   },
   data() {
@@ -274,13 +306,20 @@ export default {
       imagesUrl: []
     }
   },
+
   methods: {
     onSubmit(value, { resetForm }) {
       console.log(value)
     },
+    updateImage() {
+      this.tempProduct.imagesUrl = this.tempProduct.imagesUrl.filter((e) => {
+        return e !== ''
+      })
+    },
     uploadFile() {
+      console.dir(this.$refs.fileInput.value)
       const uploadedFile = this.$refs.fileInput.files[0]
-      console.dir(uploadedFile) // console.dir()可以顯示一個對象所有的屬性和方法。
+      // console.dir()可以顯示一個對象所有的屬性和方法。
       const formData = new FormData()
       formData.append('file-to-upload', uploadedFile)
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
@@ -293,57 +332,51 @@ export default {
     },
     uploadImages() {
       const example = (status) => {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
           setTimeout(() => {
             if (status) {
               resolve('成功!!')
+            } else {
+              // eslint-disable-next-line prefer-promise-reject-errors
+              reject('失敗')
             }
-          })
+          }, 1000)
         })
       }
       example(true)
         .then(() => {
           const uploadedFile = this.$refs.fileImages.files
-          this.imagesUrl = []
-          this.tempProduct.imagesUrl = ''
-          for (let i = 0; i < uploadedFile.length; i++) {
-            const formData = new FormData()
-            formData.append('file-to-upload', uploadedFile[i])
+          if (uploadedFile.length > 5) {
+            this.ToastMessage(0, '最多只能選擇5張圖片!')
+            return example(false)
+          } else {
+            this.imagesUrl = []
+            this.tempProduct.imagesUrl = ''
             const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
-            this.$http.post(api, formData).then((res) => {
-              console.log(res.data.imageUrl)
-              this.imagesUrl.push(res.data.imageUrl)
-            })
+            for (let i = 0; i < uploadedFile.length; i++) {
+              const formData = new FormData()
+              formData.append('file-to-upload', uploadedFile[i])
+              this.$http.post(api, formData).then((res) => {
+                this.imagesUrl.push(res.data.imageUrl)
+              })
+            }
+            return this.imagesUrl
           }
-          return example(true)
         })
-        .then(() => {
-          this.tempProduct.imagesUrl = this.imagesUrl
-          console.log(this.tempProduct.imagesUrl)
+        .then((res) => {
+          this.tempProduct.imagesUrl = res
+          this.ToastMessage(1, '上傳成功')
+        })
+        .catch((err) => {
+          console.log(err)
         })
     }
-    // // addImage() {
-    // //   this.$refs.images.innerHTML += `
-    // //   <label for="images">請輸入連結 </label>
-    // //   <br />
-    // //   <div class="mb-3 input-group mt-3">
-    // //   <input
-    // //                 type="url"
-    // //                 id="images"
-    // //                 class="form-control form-control"
-    // //                 placeholder="請輸入連結"
-    // //               />
-    // //               <button type="button" class="btn btn-outline-danger">
-    // //                 移除
-    // //               </button>
-    // //             </div>
-
-    // //   `
-    // //   this.childLen = this.$refs.images.childElementCount
-    // // }
   },
   mounted() {
-    this.emitter.on('init', (data) => {})
+    this.emitter.on('init', () => {
+      this.$refs.fileInput.value = ''
+      this.$refs.fileImages.value = ''
+    })
   }
 }
 </script>

@@ -47,7 +47,7 @@
                 'fs-5': item.title.length >= 25,
                 'fs-4': item.title.length < 15
               }"
-              style="color:black"
+              style="color: black"
             >
               {{ item.title }}
             </h5>
@@ -67,7 +67,7 @@
     </swiper>
   </section>
 
-  <!-- <button @click="test()">test</button> -->
+  <button @click="test()">test</button>
   <section class="second">
     <div class="text">
       <h1>提供服務</h1>
@@ -147,7 +147,7 @@ export default {
       this.$router.push(`/user/productlist?query=${item}`)
     },
     test() {
-      this.ToastMessage(2)
+      this.ToastMessage(1, '加入成功')
     },
     ProductDetail(id) {
       this.$router.push(`/user/product/${id}`)
